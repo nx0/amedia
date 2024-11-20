@@ -1,0 +1,30 @@
+.DS_Store          # macOS
+Thumbs.db         # Windows
+
+terraform.tfstate
+# Ignorar la carpeta de dependencias de Node.js
+node_modules/
+
+# Ignorar archivos de configuración de entorno
+.env
+
+# Ignorar archivos de logs
+*.log
+*.lock
+# Ignorar archivos temporales de edición
+*.tmp
+
+# Ignorar directorios de compilación
+/build/
+dist/
+
+# Ignorar archivos de configuración específicos
+.vscode/
+.idea/
+
+# Ignorar todos los archivos .txt excepto uno específico
+*.txt
+!important.txt
+
+# Ignorar cualquier archivo en la carpeta "temp"
+temp/
