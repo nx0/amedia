@@ -1,9 +1,10 @@
 organizations = {
   "my-aws-org" = {
+    
     "units" = {
-      "my-ou" = {
+      "my-ou2" = {
         "name"      = "DevelopmentAccount"
-        "email"     = "dev-account@example.com"
+        "email"     = "dev-accountxvvv@example.com"
         "role_name" = "OrganizationAccountAccessRole"
         zones = {
           "example.com" = {
@@ -13,14 +14,10 @@ organizations = {
             records  = ["192.0.2.1"]
           }
         }
-      }
-        }
-    },
-    "my-aws-org2" = {
-    "units" = {
-      "my-ou" = {
+      },
+      "my-ou3" = {
         "name"      = "DevelopmentAccount"
-        "email"     = "dev-account@example.com"
+        "email"     = "dev-accountxvxxxxvvazx@example.com"
         "role_name" = "OrganizationAccountAccessRole"
         zones = {
           "example.com" = {
@@ -30,7 +27,33 @@ organizations = {
             records  = ["192.0.2.1"]
           }
         }
-      }
+      },
+      "my-ou4" = {
+        "name"      = "DevelopmentAccount"
+        "email"     = "dev-accountxx22xxxvvv@example.com"
+        "role_name" = "OrganizationAccountAccessRole"
+        zones = {
+          "example.com" = {
+            name     = "www"
+            type     = "A"
+            ttl      = 300
+            records  = ["192.0.2.1"]
+          }
+        }
+      },
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
         }
     }
 }

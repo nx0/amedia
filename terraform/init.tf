@@ -12,6 +12,9 @@ terraform {
   }
 }
 
+
+data "aws_organizations_organization" "current" {}
+
 module "aws_organizations" {
 
   # generates a map from an object map to iterate over
@@ -19,7 +22,8 @@ module "aws_organizations" {
   
 
   source    = "./modules/organization"
-  name      = each.value.unit_name
+  name      = each.value.org
+  organization = each.value.name 
   email     = each.value.unit_email
   role_name = each.value.unit_role
 
@@ -29,11 +33,18 @@ module "aws_organizations" {
   #enabled_policy_types = ["SERVICE_CONTROL_POLICY"]
 }
 
-#module "aws_accounts" {
-#  for_each  = var.organization
-#  source    = "./modules/account"
-#  name      = "DevelopmentAccount"
-#  email     = "dev-account@example.com"  # Ensure this email is unique and valid
-#  role_name = "OrganizationAccountAccessRole"
-#  parent_id = aws_organizations_organizational_unit.development.id
-#}
+module "aws_accounts" {
+  for_each =  { for idx, record in local.m : idx => record }
+
+  source    = "./modules/account"
+  name      = each.value.name
+  email     = each.value.unit_email # Ensure this email is unique and valid
+  role_name = each.value.unit_role
+  #parent_id = aws_organizations_organizational_unit.development.id
+  #parent_id = module.aws_organizations.0.org_id.0
+  parent_id = each.value.ou
+
+  depends_on = [
+    module.aws_organizations
+  ]
+}

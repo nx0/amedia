@@ -14,6 +14,6 @@ variable role_name {
 }
 
 variable parent_id {
-    type = string
+    
     description = ""
 }
