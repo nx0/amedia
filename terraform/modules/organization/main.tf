@@ -58,7 +58,6 @@ resource "aws_ssoadmin_account_assignment" "admin_assignment" {
   principal_id      = aws_identitystore_group.main[0].id
   principal_type    = "GROUP"
 
-  #account_id        = "051826722573"  # Replace with your AWS account ID
-  target_id   = "051826722573"
+  target_id   = var.aws_account
   target_type = "AWS_ACCOUNT"
 }

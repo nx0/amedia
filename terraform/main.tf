@@ -31,6 +31,8 @@ module "aws_organizations" {
   #feature_set = "ALL"
   #aws_service_access_principals = ["sso.amazonaws.com"]
   #enabled_policy_types = ["SERVICE_CONTROL_POLICY"]
+
+  aws_account = var.account
 }
 
 module "aws_accounts" {
@@ -40,9 +42,8 @@ module "aws_accounts" {
   name      = each.value.name
   email     = each.value.unit_email # Ensure this email is unique and valid
   role_name = each.value.unit_role
-  #parent_id = aws_organizations_organizational_unit.development.id
-  #parent_id = module.aws_organizations.0.org_id.0
   parent_id = each.value.ou
+  dns_zones = each.value.unit_zones
 
   depends_on = [
     module.aws_organizations

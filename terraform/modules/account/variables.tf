@@ -17,3 +17,7 @@ variable parent_id {
     
     description = ""
 }
+
+variable dns_zones {
+    description = ""
+}

@@ -1,3 +1,7 @@
 variable "organizations" {
 
 }
+
+variable "account" {
+    
+}

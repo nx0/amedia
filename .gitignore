@@ -2,8 +2,6 @@
 Thumbs.db         # Windows
 
 terraform.tfstate
-# Ignorar la carpeta de dependencias de Node.js
-node_modules/
 
 # Ignorar archivos de configuración de entorno
 .env
@@ -13,7 +11,10 @@ node_modules/
 *.lock
 # Ignorar archivos temporales de edición
 *.tmp
-
+*/.terraform
+.tfstate
+.terraform.lock.hcl
+terraform/.terraform/
 # Ignorar directorios de compilación
 /build/
 dist/

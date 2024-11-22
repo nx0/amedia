@@ -9,6 +9,7 @@ locals {
                             "unit_name" = zz.name
                             "unit_email" = zz.email
                             "unit_role" = zz.role_name
+                            "unit_zones" = zz.zones
                             }
                          ]])
                    ])
@@ -22,6 +23,7 @@ locals {
       unit_email  = ou.unit_email
       unit_name   = ou.unit_name
       unit_role   = ou.unit_role
+      unit_zones  = ou.unit_zones
     }
     }
 
@@ -37,4 +39,13 @@ proxy = {
       for key in keys(local.ou_map) : key => merge(local.ou_map[key], { ou = local.proxy[key].ou })
     }
   )
+
+
+
+
+
+
+
+
+
 }
