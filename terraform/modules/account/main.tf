@@ -5,12 +5,12 @@ resource "aws_organizations_account" "oa" {
   parent_id = var.parent_id
 }
 
-module "route53" {
-  for_each = var.dns_zones
-  source    = "../../modules/route53"
-  zone      = each.key
-  zone_name     = each.value.name
-  zone_type = each.value.type
-  records = each.value.records
-  ttl = each.value.ttl
-}
+#module "route53" {
+#  for_each = var.dns_zones
+#  source    = "../../modules/route53"
+#  zone      = each.key
+#  zone_name     = each.value.name
+#  zone_type = each.value.type
+#  records = each.value.records
+#  ttl = each.value.ttl
+#}

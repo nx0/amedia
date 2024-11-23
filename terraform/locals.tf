@@ -1,6 +1,16 @@
 
 
 locals {
+    new2 = flatten([
+    for k in keys(var.organizations) : 
+        { "org_name" = k }  
+    ])
+  
+  # convert into a map to be iterable
+  organizations = tomap({ 
+    for item in local.new2 : item.org_name => item
+  })
+  
     units = flatten([for k, v in var.organizations:
                  flatten([for dataset, units in v: 
                            [for unit_name, zz in units:
@@ -14,35 +24,14 @@ locals {
                          ]])
                    ])
 
-
-    ou_map = {
-    for ou in local.units : 
-    ou.name => {
-      name = ou.name
-      org         = ou.org
-      unit_email  = ou.unit_email
-      unit_name   = ou.unit_name
-      unit_role   = ou.unit_role
-      unit_zones  = ou.unit_zones
-    }
-    }
-
-proxy = {
-    for user in module.aws_organizations : 
-    keys(user.ou)[0] => {
-      ou = user.ou[keys(user.ou)[0]].ou
-    }
+parent_orgs = {
+    for key, value in module.aws_organizations :
+      key => value.orgs[key].parent_org
   }
 
-    m = merge(
-    {
-      for key in keys(local.ou_map) : key => merge(local.ou_map[key], { ou = local.proxy[key].ou })
-    }
-  )
 
 
-
-
+parent_ou = merge([for item in module.aws_ou : item.ou]...)
 
 
 

@@ -1,10 +1,10 @@
 account = "051826722573"
 organizations = {
-  "my-aws-org" = {
+  "my-companyx" = {
     "units" = {
-      "my-gagaga" = {
+      "my-ou1x" = {
         "name"      = "DevelopmentAccount"
-        "email"     = "dev-accountxvvv@example.com"
+        "email"     = "ou1@example.com"
         "role_name" = "OrganizationAccountAccessRole"
         "zones" = {
           "example.com" = {
@@ -15,9 +15,9 @@ organizations = {
           }
         }
       },
-      "my-ou2" = {
+      "my-ou2x" = {
         "name"      = "DevelopmentAccount"
-        "email"     = "dev-accountxvvv@example.com"
+        "email"     = "ou2@example.com"
         "role_name" = "OrganizationAccountAccessRole"
         "zones" = {
           "example.com" = {
@@ -28,9 +28,13 @@ organizations = {
           }
         }
       },
-      "my-ou3" = {
+    }
+  },
+  "my-company2x" = {
+    "units" = {
+      "my-ou1x" = {
         "name"      = "DevelopmentAccount"
-        "email"     = "dev-accountxvxxxxvvazx@example.com"
+        "email"     = "ou1@example.com"
         "role_name" = "OrganizationAccountAccessRole"
         "zones" = {
           "example.com" = {
@@ -41,9 +45,9 @@ organizations = {
           }
         }
       },
-      "my-ou4" = {
+      "my-ou2x" = {
         "name"      = "DevelopmentAccount"
-        "email"     = "dev-accountxx22xxxvvv@example.com"
+        "email"     = "ou2@example.com"
         "role_name" = "OrganizationAccountAccessRole"
         "zones" = {
           "example.com" = {
