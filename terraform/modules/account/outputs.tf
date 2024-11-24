@@ -1,3 +1,3 @@
 output "zones" {
-    value = var.dns_zones
+  value = var.dns_zones
 }

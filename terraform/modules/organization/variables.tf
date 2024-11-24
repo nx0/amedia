@@ -1,1 +1,3 @@
-variable name {}
+variable "name" {
+  description = "organization unit name"
+}
