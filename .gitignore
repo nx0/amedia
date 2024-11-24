@@ -15,17 +15,11 @@ terraform.tfstate
 .tfstate
 .terraform.lock.hcl
 terraform/.terraform/
-# Ignorar directorios de compilación
-/build/
-dist/
+terraform/.modules/
 
 # Ignorar archivos de configuración específicos
 .vscode/
 .idea/
-
-# Ignorar todos los archivos .txt excepto uno específico
-*.txt
-!important.txt
 
 # Ignorar cualquier archivo en la carpeta "temp"
 temp/
