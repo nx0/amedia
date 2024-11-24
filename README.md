@@ -1,12 +1,36 @@
+# Index of contents
+* [Usage example](README.md#usage-example)
+* [Setup](README.md#setup)
+  * [Preparation](README.md#preparation)
+  * [Configure an organization](README.md#configure-an-organization)
+* [Available modules](README.md#available-modules)
+* [Deep Dive explanation](README.md#available-modules)
+  * [Organization module](README.md#organization-module)
+  * [ou module](README.md#ou-module)
+  * [Accounts module](README.md#accounts-module)
+ 
+
 
 
 # Usage example
 
-./terraform init
-./terraform plan -var-file environments/dev.yaml
-./terraform apply -auto-approve=true -var-file environments/dev.yaml 
+```bash
+mkdir /tmp/
+git clone git@github.com:nx0/amedia.git
+cd amedia/terraform
 
-Note: To simplify the test, the Terraform's state backend has been configured as "local".
+# Initalize modules
+./terraform init
+
+# Plan your changes (you will need to configure your provider.tf first!)
+./terraform plan -var-file environments/dev.yaml
+
+# Apply your changes
+./terraform apply -auto-approve=true -var-file environments/dev.yaml 
+```
+
+> [!WARNING]
+> To simplify the test, the Terraform's state backend has been configured as "local".
 ```yaml
 terraform {
   backend "local" {
@@ -14,8 +38,8 @@ terraform {
   }
 }
 ```
-A production ready environment should have a bucket configured to be storage in a safe place with versioning enabled. For 
-example an S3 bucket or similiar. Example:
+In a production ready environment the state file shoulbe be configured in a bucket to be storage in a safe place with versioning enabled. For 
+example a S3 bucket or similiar. Example:
 ```yaml
 terraform {
   backend "s3" {
@@ -25,7 +49,7 @@ terraform {
   }
 }
 ```
-# Usage
+# Setup
 
 ## Preparation
 
@@ -39,28 +63,29 @@ provider "aws" {
 }
 ```
 
-Edit the terraform/provider.tf file and add your region/access and secret key.
-For the testing, region is not quite relevant as we will be creating organizations and organizations has no regions but
+Edit the [terraform/provider.tf](terraform/provider.tf) file and add your region/access and secret key.
+For the testing, **region** is not quite relevant as we will be creating organizations and organizations has no regions but
 for access and secrets keys you will need an user. Head to the following url to create an user 
 https://us-east-1.console.aws.amazon.com/iam/home?region=us-east-1#/users/create
 
 And attach the following policies:
 
-* arn:aws:iam::aws:policy/AdministratorAccess
-* arn:aws:iam::aws:policy/AWSOrganizationsFullAccess
+* `arn:aws:iam::aws:policy/AdministratorAccess`
+* `arn:aws:iam::aws:policy/AWSOrganizationsFullAccess`
 
-> [!NOTE] In a production ready environment, the AdministratorAccess is not recomendable. In such case we may need a more
+> [!NOTE]
+> In a production ready environment, the AdministratorAccess is not recomendable. In such case we may need a more
 > restrictive permissions.
 
 After creating your key, select the user and Create access key for him. 
 The use case should be CLI.
-After that you'll be able to see the access/secret key. Edit terraform/provider.tf with the user information
+After that you'll be able to see the access/secret key. Edit [terraform/provider.tf](terraform/provider.tf) with the user information.
 
 
 ## Configure an organization
 
-Inside the folder environments/ you'll find the environments env files that contains the organizations definition for 
-each environment. dev.tfvars, staging.tfvars and staging.tfvars
+Inside the folder [terraform/environments/](terraform/environments) you'll find the environments env files that contains the organizations definition for 
+each environment. [terraform/dev.tfvars](terraform/dev.tfvars), [terraform/staging.tfvars](terraform/staging.tfvars) and [terraform/prod.tfvars](terraform/prod.tfvars)
 
 The structure is as follows:
 ```yaml
@@ -117,20 +142,20 @@ You can also create different organizations by adding organization blocks inside
 },
 ```
 
-## Available modules
+# Available modules
 
-* organization: Creates the main organization that belongs to the default "Root"
-* ou: Creates the Organization Units and the Policies for the organization 
-* account: Creates an organization account inside the specified Organization Unit
-* route53: Creates the dns entries for an account
+* [terraform/modules/organization/](terraform/modules/organization/): Creates the main organization that belongs to the default "Root"
+* [terraform/modules/ou/](terraform/modules/ou/): Creates the Organization Units and the Policies for the organization 
+* [terraform/modules/accounts/](terraform/modules/accounts/): Creates an organization account inside the specified Organization Unit
+* [terraform/modules/route53/](terraform/modules/route53/): Creates the dns entries for an account
 
-## Deep dive explanation
+# Deep dive explanation
 
-While executing the main.tf file (default) inside the terraform/ folder, main will instantiate all the required modules 
+While executing the main.tf file (default) inside the [terraform/](terraform/) folder, [terraform/main.tf](terraform/main.tf) will instantiate all the required modules 
 to create our accounts/organizations, etc...
 
-### Organization module
-The call over the organization module will be in a for_each for every organization found in the "organizations" map (key), 
+## Organization module
+The call over the organization module will be in a `for_each` for every organization found in the "organizations" map (key), 
 defined in one of the environments files.
 The map is created with an org_name entry
 ```yaml
@@ -140,7 +165,7 @@ The map is created with an org_name entry
   ])
 ```
 
-afterwards, every entry is transformed into a map to be iterable by for_each
+afterwards, every entry is transformed into a map to be iterable by `for_each`
 ```yaml
   organizations = tomap({
     for item in local.org_names : item.org_name => item
@@ -156,7 +181,7 @@ organization module to be able to be attached to the corresponding ou id.
 }
 ```
 
-### Ou module
+## Ou module
 Later, the ou module is called, that will iterate over all the units that belongs to the organization
 ```yaml
   units = flatten([for k, v in var.organizations :
@@ -184,7 +209,7 @@ for_each = { for idx, record in local.units : idx => record }
 
 This basically assign the value of each index (idx) to a record (value).
 
-The ou module will return a map of id's with the following format: ou + _ + company
+The ou module will return a map of id's with the following format: `ou + _ + company`
 
 This is to easily iterate over the map directly and avoid transform the list into a map again
 ```yaml
@@ -194,7 +219,7 @@ This is to easily iterate over the map directly and avoid transform the list int
 }
 ```
 
-### Accounts map
+## Accounts module
 Last one, accounts map will be called. The iteration is exactly the same as the ou module, but this time we will be using the 
 parent_id of our returned ou + company combo.
 ```yaml
@@ -229,4 +254,9 @@ module "route53" {
 
 That's everything.
 
-Thank you for reading
+
+
+
+
+
+Thank you for reading ... 🌞
